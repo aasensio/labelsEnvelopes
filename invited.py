@@ -19,10 +19,9 @@ from reportlab.graphics import shapes
 import openpyxl
 
 wb = openpyxl.load_workbook('direcciones_solar.xlsx')
-ws = wb.get_sheet_by_name('Hoja2')
+ws = wb.get_sheet_by_name('Invited')
 
-def envelopes():
-
+def invited():
     # Create an A4 portrait (210mm x 297mm) sheets with 2 columns and 8 rows of
     # labels. Each label is 90mm x 25mm with a 2mm rounded corner. The margins are
     # automatically calculated.
@@ -34,9 +33,9 @@ def envelopes():
     def draw_label(label, width, height, obj):
         # Just convert the object to a string and print this at the bottom left of
         # the label.    
-        pos = [90, 70, 50, 30, 10]
+        pos = [90, 70, 55, 40, 25, 10]
 
-        for i in range(5):
+        for i in range(6):
             if (obj[i] != None):
                 label.add(shapes.String(2, pos[i], str(obj[i]), fontName="Helvetica", fontSize=10))
         # label.add(shapes.String(2, 5, str(obj), fontName="Helvetica", fontSize=10))
@@ -44,9 +43,9 @@ def envelopes():
     # Create the sheet.
     sheet = labels.Sheet(specs, draw_label, border=True)
 
-    columns = ['B', 'C', 'D', 'E', 'F']
+    columns = ['A', 'B', 'C', 'D', 'E', 'F']
 
-    for i in range(79):
+    for i in range(25):
         obj = []
         for c in columns:
             obj.append(ws['{0}{1}'.format(c, i+1)].value)
@@ -64,7 +63,7 @@ def envelopes():
     # sheet.add_label("Oversized label here")
 
     # Save the file and we are done.
-    sheet.save('envelopes_poster.pdf')
+    sheet.save('envelopes_invited.pdf')
     print("{0:d} label(s) output on {1:d} page(s).".format(sheet.label_count, sheet.page_count))
 
 def correos():
@@ -78,30 +77,40 @@ def correos():
     # ReportLab uses) of the label, and the object to render.
     def draw_label(label, width, height, obj):
         # Just convert the object to a string and print this at the bottom left of
-        # the label.    
-        pos = [50, 40, 30, 20, 10]
+        # the label.            
+        pos = [50, 42, 34, 26, 18, 10]
 
-        for i in range(5):
+        for i in range(6):
             if (obj[i] != None):
-                label.add(shapes.String(2, pos[i], str(obj[i]), fontName="Helvetica", fontSize=10))
+                label.add(shapes.String(2, pos[i], str(obj[i]), fontName="Helvetica", fontSize=8))
         # label.add(shapes.String(2, 5, str(obj), fontName="Helvetica", fontSize=10))
 
     # Create the sheet.
     sheet = labels.Sheet(specs, draw_label, border=True)
 
-    columns = ['B', 'C', 'D', 'E', 'F']
+    columns = ['A', 'B', 'C', 'D', 'E', 'F']
 
-    for i in range(79):
+    for i in range(25):
         obj = []
         for c in columns:
             obj.append(ws['{0}{1}'.format(c, i+1)].value)
 
         sheet.add_label(obj)
+    # Add a couple of labels.
+    # sheet.add_label("Hello")
+    # sheet.add_label("World")
+
+    # # We can also add each item from an iterable.
+    # sheet.add_labels(range(3, 22))
+
+    # # Note that any oversize label is automatically trimmed to prevent it messing up
+    # # other labels.
+    # sheet.add_label("Oversized label here")
 
     # Save the file and we are done.
-    sheet.save('correos_poster.pdf')
+    sheet.save('correos_invited.pdf')
     print("{0:d} label(s) output on {1:d} page(s).".format(sheet.label_count, sheet.page_count))
 
 if (__name__ == '__main__'):
-    envelopes()
+    invited()
     correos()
